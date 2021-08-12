@@ -13,6 +13,9 @@ lazy val pipeline = appModule("pipeline")
   .enablePlugins(CloudflowApplicationPlugin)
   .settings(commonSettings, runLocalConfigFile := Some(localConfigPath))
 
+lazy val datamodel = appModule("datamodel")
+  .enablePlugins(CloudflowLibraryPlugin)
+
 def appModule(moduleID: String): Project = {
   Project(id = moduleID, base = file(moduleID))
     .settings(
