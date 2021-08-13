@@ -5,17 +5,17 @@ import cloudflow.streamlets.StreamletShape
 import cloudflow.streamlets.avro.AvroInlet
 import org.apache.flink.streaming.api.scala.createTypeInformation
 
-class GrainEgress extends FlinkStreamlet {
-  val in: AvroInlet[Grain] = AvroInlet("grain-in")
+class GoodGrainEgress extends FlinkStreamlet {
+  val goodGrainIn: AvroInlet[Grain] = AvroInlet("good-grain-in")
 
-  override def shape(): StreamletShape = StreamletShape.withInlets(in)
+  override def shape(): StreamletShape = StreamletShape.withInlets(goodGrainIn)
 
   override protected def createLogic(): FlinkStreamletLogic = new FlinkStreamletLogic() {
     override def buildExecutionGraph(): Unit = {
-      val grain = readStream(in)
+      val goodGrainStream = readStream(goodGrainIn)
 
-      grain.addSink { grain =>
-        log.info(s"Get $grain")
+      goodGrainStream.addSink { grain =>
+        log.info(s"Grain: $grain")
       }
     }
   }

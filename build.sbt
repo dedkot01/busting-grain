@@ -7,7 +7,6 @@ lazy val root = Project(id = "root", base = file("."))
   )
   .withId("root")
   .settings(commonSettings)
-  .aggregate()
 
 lazy val pipeline = appModule("pipeline")
   .enablePlugins(CloudflowApplicationPlugin)
@@ -15,7 +14,10 @@ lazy val pipeline = appModule("pipeline")
   .aggregate(
     datamodel,
     grainGenerator,
-    grainEgress
+    grainEgress,
+    grainBuster,
+    badGrain,
+    goodGrain
   )
 
 lazy val datamodel = appModule("datamodel")
@@ -26,6 +28,18 @@ lazy val grainGenerator = appModule("grain-generator")
   .dependsOn(datamodel)
 
 lazy val grainEgress = appModule("grain-egress")
+  .enablePlugins(CloudflowFlinkPlugin)
+  .dependsOn(datamodel)
+
+lazy val grainBuster = appModule("grain-buster")
+  .enablePlugins(CloudflowFlinkPlugin)
+  .dependsOn(datamodel)
+
+lazy val goodGrain = appModule("good-grain")
+  .enablePlugins(CloudflowFlinkPlugin)
+  .dependsOn(datamodel)
+
+lazy val badGrain = appModule("bad-grain")
   .enablePlugins(CloudflowFlinkPlugin)
   .dependsOn(datamodel)
 
@@ -55,6 +69,6 @@ lazy val commonSettings = Seq(
     "-language:_",
     "-unchecked"
   ),
-  scalacOptions in(Compile, console) --= Seq("-Ywarn-unused", "-Ywarn-unused-import"),
-  scalacOptions in(Test, console) := (scalacOptions in(Compile, console)).value
+  scalacOptions in (Compile, console) --= Seq("-Ywarn-unused", "-Ywarn-unused-import"),
+  scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value
 )
