@@ -12,9 +12,22 @@ lazy val root = Project(id = "root", base = file("."))
 lazy val pipeline = appModule("pipeline")
   .enablePlugins(CloudflowApplicationPlugin)
   .settings(commonSettings, runLocalConfigFile := Some(localConfigPath))
+  .aggregate(
+    datamodel,
+    grainGenerator,
+    grainEgress
+  )
 
 lazy val datamodel = appModule("datamodel")
   .enablePlugins(CloudflowLibraryPlugin)
+
+lazy val grainGenerator = appModule("grain-generator")
+  .enablePlugins(CloudflowFlinkPlugin)
+  .dependsOn(datamodel)
+
+lazy val grainEgress = appModule("grain-egress")
+  .enablePlugins(CloudflowFlinkPlugin)
+  .dependsOn(datamodel)
 
 def appModule(moduleID: String): Project = {
   Project(id = moduleID, base = file(moduleID))

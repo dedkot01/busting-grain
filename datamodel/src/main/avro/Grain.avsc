@@ -1,0 +1,11 @@
+{
+  "namespace": "org.dedkot",
+  "type": "record",
+  "name": "Grain",
+  "fields": [
+    {
+      "name": "isRotten",
+      "type": "boolean"
+    }
+  ]
+}
