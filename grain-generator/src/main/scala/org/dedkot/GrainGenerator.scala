@@ -12,7 +12,12 @@ class GrainGenerator extends FlinkStreamlet {
 
   override protected def createLogic(): FlinkStreamletLogic = new FlinkStreamletLogic() {
     override def buildExecutionGraph(): Unit = {
-      val randomGrains = context.env.addSource(new GrainRandomGenerationFunction)
+      val randomGrains = context.env
+        .addSource(new GrainRandomGenerationFunction)
+        .process(new CounterProcessFunction)
+        .setParallelism(1)
+        .setMaxParallelism(1)
+        .name("GrainRandomGenerator")
 
       writeStream(grainOut, randomGrains)
     }

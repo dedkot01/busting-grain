@@ -6,6 +6,10 @@
     {
       "name": "isRotten",
       "type": "boolean"
+    },
+    {
+      "name": "weight",
+      "type": "double"
     }
   ]
 }

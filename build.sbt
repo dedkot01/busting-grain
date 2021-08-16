@@ -25,6 +25,9 @@ lazy val datamodel = appModule("datamodel")
 
 lazy val grainGenerator = appModule("grain-generator")
   .enablePlugins(CloudflowFlinkPlugin)
+  .settings(
+    libraryDependencies += "org.apache.flink" % "flink-metrics-dropwizard" % "1.10.2"
+  )
   .dependsOn(datamodel)
 
 lazy val grainEgress = appModule("grain-egress")

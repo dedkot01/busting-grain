@@ -13,6 +13,10 @@ class GrainEgress extends FlinkStreamlet {
   override protected def createLogic(): FlinkStreamletLogic = new FlinkStreamletLogic() {
     override def buildExecutionGraph(): Unit = {
       val grain = readStream(in)
+        .process(new GrainsCounters)
+        .setParallelism(1)
+        .setMaxParallelism(1)
+        .name("GrainEgress")
 
       grain.addSink { grain =>
         log.info(s"Get $grain")

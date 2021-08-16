@@ -7,10 +7,13 @@ import scala.util.Random
 class GrainRandomGenerationFunction extends SourceFunction[Grain] {
   private val random = new Random()
 
-  private def createRandomGrain: Grain = new Grain(isRotten = random.nextBoolean())
+  private def createRandomGrain: Grain = new Grain(
+    isRotten = random.nextBoolean(),
+    weight = random.nextDouble() * 2
+  )
 
   override def run(ctx: SourceFunction.SourceContext[Grain]): Unit = {
-    while(true) {
+    while (true) {
       Thread.sleep(5000)
       val grain = createRandomGrain
 
